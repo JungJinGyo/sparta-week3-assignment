@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Webpage Title -->
+    <title>리그오브레전드</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+
+    <!-- 주아체 적용 -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Do+Hyeon|Jua&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+
+    <script type="text/javascript">
+      //페이지 리로드 방지
+      $(document).ready(function($) {
+        $(document).on("submit", "#submit-form", function(event) {
+          event.preventDefault();
+        });
+      });
+
+      function hideAndShow() {
+        if ($("#postingBox").css("display") == "none") {
+          $("#postingBox").show();
+        } else {
+          $("#postingBox").hide();
+        }
+      }
+
+      function postDeleteAll() {
+        if ($("div.card-columns").css("display") == "none") {
+          alert("삭제할 글이 없습니다");
+        } else {
+          $("div").remove(".card"); // 현재까지 생성된 카드 전체 삭제
+          //가리기 $("div.card-columns").hide();
+        }
+      }
+
+      //개별 식제 (*미구현)
+      function postDelete() {
+        alert("선택하신 글이 삭제됐습니다");
+        this.remove(".card"); // 현재 선택된 카드 삭제
+      }
+
+      let urlValue = $("#getURL").val();
+      let commentValue = $("#getComment").val();
+
+      function postSave() {
+        urlValue = $("#getURL").val();
+        commentValue = $("#getComment").val();
+        //var urlValue = document.getElementById("#getURL").value;
+        //var commentValue = document.getElementById("#getComment").value;
+        $.ajax({
+          type: "GET",
+          url: urlValue,
+          data: {},
+          /*ajax 에러처리 구문 (삭제)
+          error: function(error) {
+            alert("유효하지 않은 URL입니다");
+          },
+          */
+          success: function(response) {
+            console.log("urlValue : " + urlValue);
+            console.log("commentValue : " + commentValue);
+            alert("저장완료");
+            makeSomeCard();
+            $("#postingBox").hide();
+            urlValue = ""; //urlValue 값 초기화
+            commentValue = ""; // commentValue 값 초기화
+            document.getElementById("getURL").value = ""; // url부분 value 초기화
+            document.getElementById("getComment").value = ""; // comment 부분 value 초기화
+            //
+          }
+        });
+      }
+
+      function makeSomeCard() {
+        let cardHtml =
+          '<div class="card" style="width: 18rem;">\
+          <img class="card-img-top" src="https://steamuserimages-a.akamaihd.net/ugc/947339560650241016/907EF15219FDA5E1F62DB2D77F38BF56490D005F/" alt="Card image cap">\
+          <div class="card-body">\
+            <h5 class="card-title"></h5>\
+            <p class="card-text"></p>\
+            <p class="card-text-comment"></p>\
+          </div>\
+          <div>\
+          <button style="display:flex; margin:auto; margin-bottom:10px;" onclick="postDelete();" class="btn-primary" type="submit">\
+            삭제하기\
+          </button>\
+          </div>\
+        </div>\
+      </div>';
+
+        let newCard = $($.parseHTML(cardHtml)); // html로 변경
+        $("div.card-columns").append(newCard); // 카드 추가
+        newCard
+          .find("h5.card-title")
+          .html('<a href="' + urlValue + '">' + urlValue + "</a>");
+        newCard.find("p.card-text-comment").text(commentValue);
+      }
+    </script>
+
+    <!-- style -->
+    <style type="text/css">
+      .wrap {
+        width: 900px;
+        margin: auto;
+      }
+
+      .card-comment {
+        margin-top: 10px;
+        font-size: 13px;
+      }
+
+      body {
+        font-family: "Jua", sans-serif;
+      }
+
+      .jumbotron {
+        background-image: url(https://kr-publish.s3.amazonaws.com/notice/0268f49d4d229bcee46589954838b252d9aa3f89.jpg);
+      }
+
+      .post-area {
+        width: 50%;
+        border: 1px solid black;
+        padding: 10px;
+        margin: auto;
+        margin-bottom: 20px;
+        border-radius: 2%;
+      }
+
+      .form-label-group {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="jumbotron">
+        <h1 class="display-4" style="color:gold">리그오브레전드</h1>
+        <p class="lead" style="color:white">리그오브레전드는 갓갓겜입니다</p>
+        <hr class="my-4" />
+        <p style="color:white">갓겜</p>
+        <p class="lead">
+          <a
+            style="color:white"
+            class="btn btn-primary btn-lg"
+            id="postButton"
+            role="button"
+            onclick="hideAndShow();"
+            >글 쓰기</a
+          >
+          <a
+            style="color:white"
+            class="btn btn-primary btn-lg"
+            id="postButton"
+            role="button"
+            onclick="postDeleteAll();"
+            >전체글 삭제</a
+          >
+        </p>
+      </div>
+      <div class="post-area" id="postingBox" style="display:none;">
+        <form id="submit-form" class="form-signin">
+          <div class="text-center mb-4">
+            <h1
+              style="margin-top:10px;"
+              class="h3 mb-3 font-weight-normal"
+              id="postSave"
+              onclick="postSave();"
+            >
+              기사 저장하기
+            </h1>
+            <p>
+              원하는 기사를 저장할 수 있습니다
+              <a href="https://caniuse.com/#feat=css-placeholder-shown"
+                >(도움말 보기)</a
+              >
+            </p>
+          </div>
+
+          <div class="form-label-group">
+            <label for="inputEmail">기사 URL</label>
+            <input
+              id="getURL"
+              value=""
+              type="url"
+              id="inputEmail"
+              class="form-control"
+              placeholder="기사 URL을 입력해주세요"
+              required
+              autofocus
+            />
+          </div>
+
+          <div class="form-label-group">
+            <label for="inputPassword">간단 코멘트</label>
+            <textarea
+              id="getComment"
+              value="test"
+              type="password"
+              id="inputPassword"
+              class="form-control"
+              placeholder="코멘트를 입력해주세요"
+              required
+            ></textarea>
+          </div>
+
+          <div class="checkbox mb-3">
+            <label>
+              <input type="checkbox" value="remember-me" /> 비밀글 등록시
+              체크해주세요
+            </label>
+          </div>
+          <button onclick="postSave();" class="btn-primary" type="submit">
+            저장하기
+          </button>
+          <p class="mt-5 mb-3 text-muted text-center"></p>
+        </form>
+      </div>
+
+      <!--카드 폼 복사용
+      <div class="card-columns">
+        <div class="card">
+          <img
+            class="card-img-top"
+            src="https://steamuserimages-a.akamaihd.net/ugc/947339560650241016/907EF15219FDA5E1F62DB2D77F38BF56490D005F/"
+            alt="Card image cap"
+          />
+          <div class="card-body">
+            <a class="card-title" href="#">신규 스킨 K/DA 출시</a>
+            <p class="card-text">20.1.4 출시</p>
+            <a class="card-comment" href="#">댓글 남기기</a>
+          </div>
+        </div>
+	  </div> 
+		-->
+      <!--카드 생성 구역-->
+      <div class="card-columns"></div>
+    </div>
+  </body>
+</html>
